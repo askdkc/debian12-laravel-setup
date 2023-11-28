@@ -69,11 +69,15 @@ Open your browser and access to http://laravel.test/
 You can install PostgreSQL and PGroonga using the following Setup Script
 ```bash
 cd /tmp
-wget https://packages.groonga.org/debian/groonga-apt-source-latest-bullseye.deb
-sudo apt install -y -V ./groonga-apt-source-latest-bullseye.deb
+sudo apt install -y -V lsb-release
+wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+wget https://packages.groonga.org/debian/groonga-apt-source-latest-$(lsb_release --codename --short).deb
+sudo apt install -y -V ./groonga-apt-source-latest-$(lsb_release --codename --short).deb
+sudo apt update
 
-wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --no-default-keyring --keyring /usr/share/keyrings/pdgd-keyring.gpg --import -
-echo "deb [signed-by=/usr/share/keyrings/pdgd-keyring.gpg] http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release --codename --short)-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 
 sudo apt update
 sudo apt install -y -V postgresql-16
